@@ -3,20 +3,28 @@ import TodoList from "./ToDoList"
 import Header from "./Header";
 import InputTodo from "./InputTodo";
 import { v4 as uuidv4 } from "uuid";
-import axios from "axios";
 import "../App.css";
-
-class TodoContainer extends React.Component{
-    
+class TodoContainer1 extends React.Component{
     state = {
-        todos: [],
-        show: false,
+        todos: [
+          {
+            id: uuidv4(),
+            title: "Setup development environment",
+            completed: true
+          },
+          {
+            id: uuidv4(),
+            title: "Develop website and add content",
+            completed: false
+          },
+          {
+            id: uuidv4(),
+            title: "Deploy to live server",
+            completed: false
+          }
+        ]
        };
 
-    componentDidMount(){
-        axios.get("https://jsonplaceholder.typicode.com/todos?_limit=10")
-        .then(response => this.setState({todos:response.data}) );
-    }
        handlechange = (id) => {
            this.setState({
              todos: this.state.todos.map(todo =>{
@@ -28,27 +36,25 @@ class TodoContainer extends React.Component{
        };
        
        deleteItem = (id) => {
-        axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
-        .then(response => this.setState({
+        this.setState({
           todos: [
             ...this.state.todos.filter(todo => {
               return todo.id !== id;
             })
           ]
-        })
-        )};
+        });
+      };
 
       addItem = (title) => {
-        axios.post("https://jsonplaceholder.typicode.com/todos",{
-            title:title,
-            completed: false,
-        })
-        .then(response =>
-            this.setState({
-               todos: [...this.state.todos,response.data], 
-            }))
+        const newTodo = {
+          id: uuidv4(),
+          title: title,
+          completed: false
+        };
+        this.setState({
+          todos: [...this.state.todos, newTodo]
+        });
       }
-
 
     render(){
         return(
@@ -62,4 +68,4 @@ class TodoContainer extends React.Component{
 
 }
 
-export default TodoContainer
+export default TodoContainer1
